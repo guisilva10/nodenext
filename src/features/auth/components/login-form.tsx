@@ -27,6 +27,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Input } from "@/app/_components/ui/input";
 import { authClient } from "@/lib/auth-client";
+import { Loader } from "lucide-react";
 
 const loginSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -55,6 +56,7 @@ export function LoginForm() {
       },
       {
         onSuccess: () => {
+          toast.success("login successful");
           router.push("/");
         },
         onError: (ctx) => {
@@ -77,16 +79,33 @@ export function LoginForm() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid gap-6">
-                <div className="gp-4 flex flex-col">
+                <div className="flex flex-col gap-4">
                   <Button
                     className="w-full"
                     variant="outline"
                     type="button"
                     disabled={isPending}
                   >
+                    <Image
+                      width={20}
+                      height={20}
+                      src="/github.svg"
+                      alt="github"
+                    />
                     Continue with Github
                   </Button>
-                  <Button className="w-full" type="button" disabled={isPending}>
+                  <Button
+                    className="w-full"
+                    variant="outline"
+                    type="button"
+                    disabled={isPending}
+                  >
+                    <Image
+                      width={20}
+                      height={20}
+                      src="/google.svg"
+                      alt="google"
+                    />
                     Continue with Google
                   </Button>
                 </div>
@@ -126,7 +145,11 @@ export function LoginForm() {
                     )}
                   />
                   <Button type="submit" className="w-full" disabled={isPending}>
-                    Login
+                    {isPending ? (
+                      <Loader className="size-4 animate-spin" />
+                    ) : (
+                      "Login"
+                    )}
                   </Button>
                 </div>
                 <div className="text-center text-sm">
