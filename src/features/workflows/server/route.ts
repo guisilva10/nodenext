@@ -56,7 +56,7 @@ export const workflowsRouter = createTRPCRouter({
       }),
     )
     .query(({ ctx, input }) => {
-      return db.workflow.findUnique({
+      return db.workflow.findUniqueOrThrow({
         where: {
           id: input.id,
           userId: ctx.auth.user.id,
