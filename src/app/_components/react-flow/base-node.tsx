@@ -1,28 +1,37 @@
 import { cn } from "@/lib/utils";
 import { forwardRef, type HTMLAttributes } from "react";
+import { NodeStatus } from "./node-status-indicator";
+import { CheckCircleIcon, Loader2Icon, XCircleIcon } from "lucide-react";
 
-export const BaseNode = forwardRef<
-  HTMLDivElement,
-  HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "relative rounded-md border bg-card text-card-foreground",
-      "hover:ring-1",
-      // React Flow displays node elements inside of a `NodeWrapper` component,
-      // which compiles down to a div with the class `react-flow__node`.
-      // When a node is selected, the class `selected` is added to the
-      // `react-flow__node` element. This allows us to style the node when it
-      // is selected, using Tailwind's `&` selector.
-      "[.react-flow\\_\\_node.selected_&]:border-muted-foreground",
-      "[.react-flow\\_\\_node.selected_&]:shadow-lg",
-      className,
-    )}
-    tabIndex={0}
-    {...props}
-  />
-));
+interface BaseNodeProps extends HTMLAttributes<HTMLDivElement> {
+  status?: NodeStatus;
+}
+
+export const BaseNode = forwardRef<HTMLDivElement, BaseNodeProps>(
+  ({ className, status, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        "bg-card text-card-foreground hover:bg-accent border-muted-foreground relative rounded-sm border",
+
+        className,
+      )}
+      tabIndex={0}
+      {...props}
+    >
+      {props.children}
+      {status === "error" && (
+        <XCircleIcon className="absolute right-0.5 bottom-0.5 size-2 stroke-3 text-red-700" />
+      )}
+      {status === "success" && (
+        <CheckCircleIcon className="absolute right-0.5 bottom-0.5 size-2 stroke-3 text-green-700" />
+      )}
+      {status === "loading" && (
+        <Loader2Icon className="absolute -right-0.5 -bottom-0.5 size-2 animate-spin stroke-3 text-blue-700" />
+      )}
+    </div>
+  ),
+);
 BaseNode.displayName = "BaseNode";
 
 /**
@@ -84,7 +93,7 @@ export const BaseNodeFooter = forwardRef<
     ref={ref}
     data-slot="base-node-footer"
     className={cn(
-      "flex flex-col items-center gap-y-2 border-t px-3 pb-3 pt-2",
+      "flex flex-col items-center gap-y-2 border-t px-3 pt-2 pb-3",
       className,
     )}
     {...props}
