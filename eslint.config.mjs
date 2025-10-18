@@ -30,6 +30,7 @@ const eslintConfig = [
       "@typescript-eslint/no-array-constructor": "off",
       "@typescript-eslint/no-unnecessary-type-constraint": "off",
       "@typescript-eslint/no-unsafe-function-type": "off",
+      "@next/next/no-img-element": "off",
     },
   },
 ];
